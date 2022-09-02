@@ -1,3 +1,4 @@
+![example workflow](https://github.com/Nosenzor/TBB_ShowCase/actions/workflows/lukka_ci.yml/badge.svg)
 # TBB :: The Threading Building Blocks
 
 ## Intro :
