@@ -1,9 +1,8 @@
-# TBB for DragonR 
-Threading Building Blocks
+# TBB :: The Threading Building Blocks
 
-## Help :
-* Contact me : 
-* [TBB Help (intel)](https://www.threadingbuildingblocks.org/docs/help/index.htm)
+## Intro :
+This is a small showcases to demo some of the TBB features.
+TBB is a powerful multithreading library, this repo try to show good and some bad usages of multithreading.
 
 ## Keep in mind :
 *Always measure and profile to understand what is your performance problem*
@@ -92,3 +91,7 @@ The demo show that **STL *shared_ptr* are thread-safe ! BUT thread-safe pointers
 ```
 bin/tbb_tests --log_level=all --run_test=Tests_tbb/tbb_SharedPtrs
 ```
+
+
+## Help :
+* [TBB Help (intel)](https://www.threadingbuildingblocks.org/docs/help/index.htm)

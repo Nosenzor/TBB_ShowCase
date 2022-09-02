@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(Tests_tbb)
 
 BOOST_AUTO_TEST_CASE(tbb_Cartesian_to_Polar)
 {
-   const bool SavePolarBears = true;
+   const bool SavePolarBears = false;
    const bool ActivateCompose = true;
 
    const bool ActivateGenerator = true;

@@ -1,0 +1,9 @@
+{
+  "name": "tbbminidemo",
+  "version-string": "0.1.0",
+  "description": "a small show case for tbb",
+  "dependencies": [
+    "boost-test",
+    "tbb"
+  ]
+}
