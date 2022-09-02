@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include <array>
 #include <vector>
 #include <cmath>
@@ -10,6 +10,7 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include <numeric>
 //#include <execution>
 #include "tbb/tbb.h"
 #include "tbb/parallel_for_each.h"
@@ -145,7 +146,7 @@ BOOST_AUTO_TEST_CASE(tbb_Cartesian_to_Polar)
          return PolrPt1[0] + lsum;
       };
       auto Start = std::chrono::high_resolution_clock::now();
-      double Sum = std::accumulate(begin(PolarPoints_Seq), end(PolarPoints_Seq), 0., fSumPolarR);
+	 [[maybe_unused]] double Sum = std::accumulate(begin(PolarPoints_Seq), end(PolarPoints_Seq), 0., fSumPolarR);
       std::chrono::duration<float> time_span = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::high_resolution_clock::now() - Start);
       BOOST_TEST_MESSAGE("SUM RADIUS [SEQ] " << time_span.count() << "s");
    }
@@ -160,9 +161,9 @@ BOOST_AUTO_TEST_CASE(tbb_Cartesian_to_Polar)
       struct Sum {
          double value;
          Sum() : value(0.) {}
-         Sum(Sum& s, tbb::split) { value = 0; }
+		 Sum(Sum& s, tbb::split) { value = s.value; }
          void operator()(const tbb::blocked_range< std::vector<std::array<double, 3>>::iterator>& range) {
-            float temp = value;
+            auto temp = value;
             for (auto a = range.begin(); a != range.end(); ++a) {
                temp += (*a)[0];
             }
@@ -191,26 +192,26 @@ BOOST_AUTO_TEST_CASE(tbb_Cartesian_to_Polar)
          return std::log(std::exp(PolrPt1[0]) * std::exp(lsum));// This a very stupid way to mak a simple sum :-)
       };
       auto Start = std::chrono::high_resolution_clock::now();
-      double Sum = std::accumulate(begin(PolarPoints_Seq), end(PolarPoints_Seq), 0., fSumPolarR2);
+	 [[maybe_unused]] double Sum = std::accumulate(begin(PolarPoints_Seq), end(PolarPoints_Seq), 0., fSumPolarR2);
       std::chrono::duration<float> time_span = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::high_resolution_clock::now() - Start);
       BOOST_TEST_MESSAGE("SUM RADIUS KILLING POLAR BEAR :-( [SEQ] " << time_span.count() << "s");
    }
 
    if (!SavePolarBears)
    {
-      auto fSumPolarR2 = [](double lsum, const std::array<double, 3>& PolrPt1) -> double
-      {
-         //return PolrPt1[0] + lsum;
-         return std::log(std::exp(PolrPt1[0]) * std::exp(lsum));// This a very stupid way to mak a simple sum :-)
-      };
+//      auto fSumPolarR2 = [](double lsum, const std::array<double, 3>& PolrPt1) -> double
+//      {
+//         //return PolrPt1[0] + lsum;
+//         return std::log(std::exp(PolrPt1[0]) * std::exp(lsum));// This a very stupid way to mak a simple sum :-)
+//      };
 
 
       struct Sum {
          double value;
          Sum() : value(0.) {}
-         Sum(Sum& s, tbb::split) { value = 0; }
+         Sum(Sum& s, tbb::split) { value = s.value; }
          void operator()(const tbb::blocked_range< std::vector<std::array<double, 3>>::iterator>& range) {
-            float temp = value;
+            auto temp = value;
             for (auto a = range.begin(); a != range.end(); ++a) {
                temp = std::log(std::exp((*a)[0]) * std::exp(temp));
             }
@@ -308,7 +309,7 @@ BOOST_AUTO_TEST_CASE(tbb_Containers)
    if (1)
    {
       auto Start = std::chrono::high_resolution_clock::now();
-      tbb::concurrent_vector<int> Test;
+      tbb::concurrent_vector<size_t> Test;
       tbb::parallel_for(size_t(0), NbToPush, [&Test](size_t i) {Test.push_back(i);});
       if (Test.size() != NbToPush)
          BOOST_TEST_MESSAGE("Error Size has not be reached");
@@ -334,14 +335,13 @@ BOOST_AUTO_TEST_CASE(tbb_Containers)
 BOOST_AUTO_TEST_CASE(tbb_ContainersSTL)
 {
 
-   auto Start = std::chrono::high_resolution_clock::now();
    tbb::concurrent_vector<int> Test(1e7);
    std::iota(Test.begin(), Test.end(), 0);
 
 
    {
       auto Start = std::chrono::high_resolution_clock::now();
-      auto Nb3Multiple = std::count_if(Test.begin(), Test.end(), [](int i)->bool { return i % 3 == 0; });
+	 [[maybe_unused]] auto Nb3Multiple = std::count_if(Test.begin(), Test.end(), [](int i)->bool { return i % 3 == 0; });
       std::chrono::duration<float> time_span = std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::high_resolution_clock::now() - Start);
       BOOST_TEST_MESSAGE("Multiple 3 [SEQ] " << time_span.count() << "s");
    }
@@ -357,14 +357,12 @@ BOOST_AUTO_TEST_CASE(tbb_ContainersSTL)
 
 BOOST_AUTO_TEST_CASE(tbb_Allocator)
 {
-
-   auto Start = std::chrono::high_resolution_clock::now();
    constexpr size_t NbAllocs = 1e8;
 
    if (1)
    {
       auto Start = std::chrono::high_resolution_clock::now();
-      tbb::concurrent_vector<int> Test;
+      tbb::concurrent_vector<size_t> Test;
       tbb::parallel_for(size_t(0), NbAllocs, [&Test](size_t i) {Test.push_back(i);});
       if (Test.size() != NbAllocs)
          BOOST_TEST_MESSAGE("Error Size has not be reached");
@@ -375,7 +373,7 @@ BOOST_AUTO_TEST_CASE(tbb_Allocator)
    if (1)
    {
       auto Start = std::chrono::high_resolution_clock::now();
-      tbb::concurrent_vector<int, tbb::scalable_allocator<int>> Test;
+      tbb::concurrent_vector<size_t, tbb::scalable_allocator<size_t>> Test;
       tbb::parallel_for(size_t(0), NbAllocs, [&Test](size_t i) {Test.push_back(i);});
       if (Test.size() != NbAllocs)
          BOOST_TEST_MESSAGE("Error Size has not be reached");
@@ -435,7 +433,6 @@ BOOST_AUTO_TEST_CASE(tbb_Allocator)
 
 }
 
-std::vector<int> Data;
 BOOST_AUTO_TEST_CASE(tbb_Exception)
 {
 
