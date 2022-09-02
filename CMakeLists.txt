@@ -52,11 +52,17 @@ set(SRC_FILES test_tbb_main.cc
 find_package(TBB REQUIRED)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+
 #Create unit test exe for the connectivity_extractor
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ${TBB_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE project_options project_warnings
         Boost::unit_test_framework
         TBB::tbb
-        TBB::tbbmalloc)
+        TBB::tbbmalloc
+        Threads::Threads
+        )
 
