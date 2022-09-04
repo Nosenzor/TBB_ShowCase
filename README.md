@@ -10,11 +10,7 @@ TBB is a powerful multithreading library, this repo try to show good and some ba
 
 ## Building examples
 
-Tests are built through the cmake command through CMakeList.txt hierarchy of files and subdirectory so tests are built Every time you call the master CMakeList.txt. [cf How to build](../../../../README.md)
-
-The building script has been modified to build the tbb test cases.
-
- [Tbb tests cpp source can be found here : src/cpp/test/tbb/tbb_test.cc ](src/cpp/test/tbb/tbb_test.cc) 
+This project use CMake to build the code and VCPKG to manage dependencies
 
 ## Running tests
 

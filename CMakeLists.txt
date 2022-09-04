@@ -1,6 +1,9 @@
 #Add debug compile
 cmake_minimum_required(VERSION 3.16)
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Add project_options v0.24.1
 # https://github.com/aminya/project_options
 # Change the version in the following URL to update the package (watch the releases of the repository for future updates)
@@ -66,3 +69,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE project_options project_warnings
         Threads::Threads
         )
 
+enable_testing()
+add_test(NAME TBBDEMO COMMAND bin/tbb_demo --log_level=all )
