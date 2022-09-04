@@ -64,7 +64,7 @@ jobs:
           buildPreset: 'ninja-multi-vcpkg'
       - name: List $RUNNER_WORKSPACE after build
         run: find $RUNNER_WORKSPACE
-        shell: bas
+        shell: bash
       - name: Run unit tests
         uses: HorstBaerbel/action-ctest@1.1
         # These are optional (defaults displayed)
